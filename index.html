@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahorat.uz | Kelajak Akademiyasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; scroll-behavior: smooth; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .glow { box-shadow: 0 0 50px rgba(59, 130, 246, 0.15); }
         .card-hover:hover { transform: translateY(-10px); border-color: rgba(59, 130, 246, 0.5); transition: all 0.3s ease; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -64,7 +67,6 @@
         <div class="glass p-10 rounded-[40px] glow relative">
             <h3 class="text-4xl font-extrabold mb-2 text-center">Savollaringiz bormi?</h3>
             <p class="text-gray-400 text-center mb-10">Ma'lumotlaringizni qoldiring, biz sizga aloqaga chiqamiz.</p>
-            
             <form id="contactForm" class="grid gap-5">
                 <div class="grid md:grid-cols-2 gap-5">
                     <input type="text" id="name" placeholder="Ismingiz" class="bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-blue-500 transition w-full" required>
@@ -79,11 +81,74 @@
 
     <footer class="p-12 text-center text-gray-600 text-sm border-t border-white/5">
         <p class="mb-2">© 2026 Mahorat.uz — Kelajak platformasi</p>
-        <p class="text-gray-700 italic">Har qanday qiyinchilik - bu mahorat oshirish imkoniyati.</p>
     </footer>
 
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end">
+        <div id="chat-box" class="hidden glass w-80 md:w-96 h-[500px] rounded-[32px] mb-4 flex flex-col overflow-hidden glow border border-blue-500/30 shadow-2xl">
+            <div class="bg-blue-600 p-5 font-bold flex justify-between items-center shadow-lg">
+                <div class="flex items-center gap-2 text-white">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span>Global Chat</span>
+                </div>
+                <button onclick="toggleChat()" class="text-2xl text-white hover:scale-125 transition">&times;</button>
+            </div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-black/40 text-sm"></div>
+            <div class="p-4 border-t border-white/10 bg-white/5 flex flex-col gap-2">
+                <input type="text" id="chat-name" placeholder="Ismingiz..." class="bg-white/10 border border-white/10 p-2 rounded-xl text-xs focus:outline-none focus:border-blue-500 transition">
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="Xabar..." class="flex-1 bg-white/10 border border-white/10 p-3 rounded-xl focus:outline-none text-sm">
+                    <button onclick="sendGlobalMessage()" class="bg-blue-600 p-3 rounded-xl hover:bg-blue-700 transition active:scale-90">➤</button>
+                </div>
+            </div>
+        </div>
+        <button onclick="toggleChat()" class="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition border-2 border-white/20">
+            <svg viewBox="0 0 24 24" class="w-8 h-8 fill-white"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.02.6 3.9 1.61 5.48L2 22l4.52-1.61A9.97 9.97 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        </button>
+    </div>
+
     <script>
-        // Telegram Bot sozlamalari (O'zingizniki)
+        // --- CHAT SOZLAMALARI (ABLY) ---
+        const ably = new Ably.Realtime('bK9tvw._i5fyQ:LiEqd8rDivgul9V4rWyoAsVTkrU2nLKwp0Nj5pG91D0');
+        const channel = ably.channels.get('global-chat');
+
+        function toggleChat() {
+            document.getElementById('chat-box').classList.toggle('hidden');
+        }
+
+        function sendGlobalMessage() {
+            const name = document.getElementById('chat-name').value || "Mehmon";
+            const input = document.getElementById('chat-input');
+            if (input.value.trim() !== "") {
+                channel.publish('msg', { 
+                    user: name, 
+                    text: input.value,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+                input.value = "";
+            }
+        }
+
+        channel.subscribe('msg', (message) => {
+            const chatBox = document.getElementById('chat-messages');
+            const isMe = message.connectionId === ably.connection.id;
+            const msgHtml = `
+                <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                    <div class="${isMe ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white/10 text-gray-200 rounded-bl-none'} p-3 rounded-2xl max-w-[85%] border border-white/5">
+                        <p class="text-[10px] font-bold opacity-70 mb-1 uppercase">${message.data.user}</p>
+                        <p>${message.data.text}</p>
+                        <p class="text-[8px] opacity-40 text-right mt-1">${message.data.time}</p>
+                    </div>
+                </div>`;
+            chatBox.innerHTML += msgHtml;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendGlobalMessage(); });
+
+        // --- TELEGRAM FORM SOZLAMALARI ---
         const token = "8052322271:AAFRBZyNOBzOxplqHVlwQh-XBv96S3FI85o";
         const chat_id = "8232268725";
 
@@ -91,12 +156,8 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const status = document.getElementById('status');
+            btn.disabled = true; btn.innerText = "Yuborilmoqda...";
             
-            // Tugmani bloklash (Loading holati)
-            btn.disabled = true;
-            btn.innerText = "Yuborilmoqda...";
-            btn.classList.add('opacity-50');
-
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
@@ -107,20 +168,16 @@
             fetch(url).then(res => {
                 if(res.ok) {
                     status.innerText = "Siz bilan tez orada bog'lanamiz! ✅";
-                    status.classList.remove('hidden', 'text-red-500');
-                    status.classList.add('text-green-400');
+                    status.className = "mt-6 text-center font-bold text-green-400";
+                    status.classList.remove('hidden');
                     document.getElementById('contactForm').reset();
-                } else {
-                    throw new Error();
-                }
+                } else { throw new Error(); }
             }).catch(() => {
                 status.innerText = "Xatolik! Qayta urinib ko'ring. ❌";
-                status.classList.remove('hidden', 'text-green-400');
-                status.classList.add('text-red-500');
+                status.className = "mt-6 text-center font-bold text-red-500";
+                status.classList.remove('hidden');
             }).finally(() => {
-                btn.disabled = false;
-                btn.innerText = "Xabarni Yuborish";
-                btn.classList.remove('opacity-50');
+                btn.disabled = false; btn.innerText = "Xabarni Yuborish";
             });
         });
     </script>
