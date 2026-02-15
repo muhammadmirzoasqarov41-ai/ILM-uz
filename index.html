@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahorat.uz | Kelajak Akademiyasi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #050505; color: white; scroll-behavior: smooth; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .glow { box-shadow: 0 0 50px rgba(59, 130, 246, 0.15); }
         .card-hover:hover { transform: translateY(-10px); border-color: rgba(59, 130, 246, 0.5); transition: all 0.3s ease; }
+        /* Chat tugmasi uchun chiroyli ko'rinish (agar o'zingiz yasamoqchi bo'lsangiz) */
+        .chat-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
     </style>
 </head>
 <body>
@@ -25,43 +29,43 @@
         </div>
     </nav>
 
-    <section class="h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
         <div class="glow absolute w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]"></div>
-        <h2 class="text-6xl md:text-8xl font-extrabold mb-6 tracking-tight z-10">
+        <h2 data-aos="zoom-in" class="text-6xl md:text-8xl font-extrabold mb-6 tracking-tight z-10">
             Bilim orqali <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Zafar quching</span>
         </h2>
-        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed z-10">
+        <p data-aos="fade-up" data-aos-delay="200" class="text-gray-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed z-10">
             Zamonaviy texnologiyalar, IT va kreativ sohalarni o'rganish uchun eng qulay platforma. Kelajagingizni bugundan quring.
         </p>
-        <div class="flex flex-col md:flex-row gap-4 z-10">
+        <div data-aos="fade-up" data-aos-delay="400" class="flex flex-col md:flex-row gap-4 z-10">
             <a href="#courses" class="bg-white text-black px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 transition active:scale-95 text-center">Kurslarni ko'rish</a>
             <a href="#contact" class="glass px-10 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 transition text-center">Savol berish</a>
         </div>
     </section>
 
     <section id="courses" class="max-w-6xl mx-auto px-6 py-24">
-        <h3 class="text-4xl font-extrabold mb-16 text-center">Bizning <span class="text-blue-500">Yo'nalishlar</span></h3>
+        <h3 data-aos="fade-right" class="text-4xl font-extrabold mb-16 text-center md:text-left">Bizning <span class="text-blue-500">Yo'nalishlar</span></h3>
         <div class="grid md:grid-cols-3 gap-8 text-left">
-            <div class="glass p-8 rounded-3xl card-hover border border-white/5">
+            <div data-aos="fade-up" data-aos-delay="100" class="glass p-8 rounded-3xl card-hover border border-white/5">
                 <div class="text-blue-500 text-4xl mb-4 font-bold">01</div>
                 <h4 class="text-2xl font-bold mb-3">Frontend</h4>
-                <p class="text-gray-400">React, Next.js va Tailwind yordamida zamonaviy interfeyslar yaratishni o'rganasiz.</p>
+                <p class="text-gray-400">React va Next.js yordamida zamonaviy interfeyslar yaratishni o'rganasiz.</p>
             </div>
-            <div class="glass p-8 rounded-3xl card-hover border border-white/5">
+            <div data-aos="fade-up" data-aos-delay="200" class="glass p-8 rounded-3xl card-hover border border-white/5">
                 <div class="text-blue-500 text-4xl mb-4 font-bold">02</div>
                 <h4 class="text-2xl font-bold mb-3">Backend</h4>
-                <p class="text-gray-400">Python, Node.js va Ma'lumotlar bazasi bilan ishlash bo'yicha professional ta'lim.</p>
+                <p class="text-gray-400">Python va Node.js orqali murakkab tizimlar poydevorini quring.</p>
             </div>
-            <div class="glass p-8 rounded-3xl card-hover border border-white/5">
+            <div data-aos="fade-up" data-aos-delay="300" class="glass p-8 rounded-3xl card-hover border border-white/5">
                 <div class="text-blue-500 text-4xl mb-4 font-bold">03</div>
-                <h4 class="text-2xl font-bold mb-3">UI/UX Dizayn</h4>
-                <p class="text-gray-400">Figma va Adobe orqali chiroyli va qulay foydalanuvchi interfeyslarini yaratish.</p>
+                <h4 class="text-2xl font-bold mb-3">UI/UX</h4>
+                <p class="text-gray-400">Figma orqali mukammal dizaynlar va foydalanuvchi tajribasini yarating.</p>
             </div>
         </div>
     </section>
 
     <section id="contact" class="max-w-4xl mx-auto px-6 py-24">
-        <div class="glass p-10 rounded-[40px] glow relative">
+        <div data-aos="flip-left" class="glass p-10 rounded-[40px] glow relative">
             <h3 class="text-4xl font-extrabold mb-2 text-center">Savollaringiz bormi?</h3>
             <p class="text-gray-400 text-center mb-10">Ma'lumotlaringizni qoldiring, biz sizga aloqaga chiqamiz.</p>
             
@@ -70,20 +74,22 @@
                     <input type="text" id="name" placeholder="Ismingiz" class="bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-blue-500 transition w-full" required>
                     <input type="email" id="email" placeholder="Email manzilingiz" class="bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-blue-500 transition w-full" required>
                 </div>
-                <textarea id="message" rows="4" placeholder="Xabaringiz yoki savolingiz..." class="bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-blue-500 transition w-full" required></textarea>
-                <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-bold text-xl transition transform active:scale-95 shadow-lg shadow-blue-600/30">Xabarni Yuborish</button>
+                <textarea id="message" rows="4" placeholder="Xabaringiz..." class="bg-white/5 border border-white/10 p-5 rounded-2xl focus:outline-none focus:border-blue-500 transition w-full" required></textarea>
+                <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 py-5 rounded-2xl font-bold text-xl transition transform active:scale-95">Xabarni Yuborish</button>
             </form>
             <p id="status" class="mt-6 text-center font-bold hidden"></p>
         </div>
     </section>
 
     <footer class="p-12 text-center text-gray-600 text-sm border-t border-white/5">
-        <p class="mb-2">© 2026 Mahorat.uz — Kelajak platformasi</p>
-        <p class="text-gray-700 italic">Har qanday qiyinchilik - bu mahorat oshirish imkoniyati.</p>
+        <p>© 2026 Mahorat.uz — Kelajak platformasi</p>
     </footer>
 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
-        // Telegram Bot sozlamalari (O'zingizniki)
+        AOS.init({ duration: 800, once: true });
+
+        // Telegram Bot Script (O'zingizniki)
         const token = "8052322271:AAFRBZyNOBzOxplqHVlwQh-XBv96S3FI85o";
         const chat_id = "8232268725";
 
@@ -91,11 +97,7 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const status = document.getElementById('status');
-            
-            // Tugmani bloklash (Loading holati)
-            btn.disabled = true;
-            btn.innerText = "Yuborilmoqda...";
-            btn.classList.add('opacity-50');
+            btn.disabled = true; btn.innerText = "Yuborilmoqda...";
 
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
@@ -107,22 +109,17 @@
             fetch(url).then(res => {
                 if(res.ok) {
                     status.innerText = "Siz bilan tez orada bog'lanamiz! ✅";
-                    status.classList.remove('hidden', 'text-red-500');
-                    status.classList.add('text-green-400');
+                    status.classList.remove('hidden', 'text-red-500'); status.classList.add('text-green-400');
                     document.getElementById('contactForm').reset();
-                } else {
-                    throw new Error();
-                }
+                } else { throw new Error(); }
             }).catch(() => {
-                status.innerText = "Xatolik! Qayta urinib ko'ring. ❌";
-                status.classList.remove('hidden', 'text-green-400');
-                status.classList.add('text-red-500');
+                status.innerText = "Xatolik! ❌";
+                status.classList.remove('hidden', 'text-green-400'); status.classList.add('text-red-500');
             }).finally(() => {
-                btn.disabled = false;
-                btn.innerText = "Xabarni Yuborish";
-                btn.classList.remove('opacity-50');
+                btn.disabled = false; btn.innerText = "Xabarni Yuborish";
             });
         });
     </script>
-</body>
+
+    </body>
 </html>
