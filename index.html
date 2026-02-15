@@ -18,7 +18,7 @@
             <h1 class="text-xl font-extrabold tracking-tighter">MAHORAT<span class="text-blue-500">.UZ</span></h1>
             <div class="hidden md:flex gap-8 text-sm font-medium">
                 <a href="#" class="hover:text-blue-400 transition">Kurslar</a>
-                <a href="#" class="hover:text-blue-400 transition">Loyihalar</a>
+                <a href="#" class="hover:text-blueBlog-400 transition">Loyihalar</a>
                 <a href="#" class="hover:text-blue-400 transition">Blog</a>
             </div>
             <button class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl text-sm font-bold transition">Bog'lanish</button>
@@ -53,5 +53,35 @@
     <footer class="p-10 text-center text-gray-600 text-sm border-t border-white/5">
         <p>© 2026 Mahorat.uz — Barcha huquqlar himoyalangan.</p>
     </footer>
+    <script>
+    const token = "8052322271:AAFRBZyNOBzOxplqHVlwQh-XBv96S3FI85o";
+    const chat_id = "8232268725";
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        const status = document.getElementById('status');
+
+        const text = `🚀 Yangi xabar!\n\n👤 Ism: ${name}\n📧 Email: ${email}\n📝 Xabar: ${message}`;
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+
+        fetch(url).then(res => {
+            if(res.ok) {
+                status.innerText = "Xabaringiz muvaffaqiyatli yuborildi! ✅";
+                status.classList.remove('hidden', 'text-red-500');
+                status.classList.add('text-green-500');
+                document.getElementById('contactForm').reset();
+            } else {
+                throw new Error();
+            }
+        }).catch(() => {
+            status.innerText = "Xatolik yuz berdi. Qayta urinib ko'ring. ❌";
+            status.classList.remove('hidden', 'text-green-500');
+            status.classList.add('text-red-500');
+        });
+    });
+</script>
 </body>
 </html>
